@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Android Authority</title> <link rel="manifest" href="/androidauthority/manifest.json">
+    <title>Ruhavik</title> <link rel="manifest" href="/manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,10 +28,10 @@
 </head>
 <body>
 
-    <img src="/androidauthority/icons/loading.gif" class="loading-gif">
+    <img src="/icons/loading.gif" class="loading-gif">
 
     <script>
-        const targetUrl = "https://androidauthority.com";
+        const targetUrl = "https://ruhavik.gurtam.space";
 
         function isPwaInstalled() {
             return window.matchMedia('(display-mode: standalone)').matches ||
@@ -51,7 +51,7 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/androidauthority/service-worker.js', { scope: '/androidauthority/' })
+                navigator.serviceWorker.register('/service-worker.js', { scope: '/ruhavik/' })
                     .then(registration => {
                         console.log('Service Worker registrado e pronto para instalação do PWA.');
                         loadPWA();
