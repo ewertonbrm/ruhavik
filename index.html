@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruhavik</title> <link rel="manifest" href="/manifest.json">
+    <title>Ruhavik</title> <link rel="manifest" href="/ruhavik/manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-    <img src="/icons/loading.gif" class="loading-gif">
+    <img src="/ruhavik/icons/loading.gif" class="loading-gif">
 
     <script>
         const targetUrl = "https://ruhavik.gurtam.space";
@@ -51,9 +51,9 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js', { scope: '/ruhavik/' })
+                navigator.serviceWorker.register('/ruhavik/service-worker.js', { scope: '/ruhavik/' })
                     .then(registration => {
-                        console.log('Service Worker registrado e pronto para instalação do PWA.');
+                        console.log('Service Worker registrado e pronto para instalação do PWA Ruhavik.');
                         loadPWA();
                     })
                     .catch(error => {

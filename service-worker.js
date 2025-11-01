@@ -1,18 +1,18 @@
-const CACHE_NAME = 'android-authority-pwa-cache-v1';
+const CACHE_NAME = 'ruhavik-pwa-cache-v1'; // Nome do cache atualizado
 const urlsToCache = [
-    '/androidauthority/',
-    '/androidauthority/index.html',
-    '/androidauthority/manifest.json',
-    '/androidauthority/icons/icon-192x192.png',
-    '/androidauthority/icons/icon-512x512.png',
-    '/androidauthority/icons/loading.gif' // <-- GIF de carregamento adicionado aqui
+    '/ruhavik/',
+    '/ruhavik/index.html',
+    '/ruhavik/manifest.json',
+    '/ruhavik/icons/icon-192x192.png',
+    '/ruhavik/icons/icon-512x512.png',
+    '/ruhavik/icons/loading.gif'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Service Worker: Arquivos críticos cacheados.');
+        console.log('Service Worker: Arquivos críticos do Ruhavik cacheados.');
         return cache.addAll(urlsToCache);
       })
   );
