@@ -1,46 +1,34 @@
-const CACHE_NAME = 'ruhavik-pwa-cache-v1'; // Nome do cache atualizado
-const urlsToCache = [
-    '/ruhavik/',
-    '/ruhavik/index.html',
-    '/ruhavik/manifest.json',
-    '/ruhavik/icons/icon-192x192.png',
-    '/ruhavik/icons/icon-512x512.png',
-    '/ruhavik/icons/loading.gif'
+const CACHE_NAME = 'ruhavik-teste-v12';
+const ASSETS = [
+  'index.html',
+  'manifest.json',
+  'icons/loading.gif',
+  'icons/icon-192x192.png',
+  'icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Service Worker: Arquivos críticos do Ruhavik cacheados.');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(ASSETS);
+    })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
+  );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-  );
-});
-
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
     })
   );
 });

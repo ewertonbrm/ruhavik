@@ -3,67 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruhavik</title> <link rel="manifest" href="/ruhavik/manifest.json">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ruhavik</title>
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FFFFFF">
-
     <style>
         body {
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            background-color: #FFFFFF; /* Garante que o fundo é branco */
-            overflow: hidden; /* Evita barras de rolagem, se o gif for muito grande */
+            background-color: #FFFFFF;
+            overflow: hidden;
+        }
+        #loading-container {
+            display: none;
         }
         .loading-gif {
-            max-width: 100%; /* Garante que o gif não exceda a largura da tela */
-            max-height: 100vh; /* Garante que o gif não exceda a altura da tela */
-            display: block; /* Remove espaços extras abaixo da imagem */
+            max-width: 100%;
+            max-height: 100vh;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <img src="/ruhavik/icons/loading.gif" class="loading-gif">
+    <div id="loading-container">
+        <img src="icons/loading.gif" class="loading-gif" alt="Carregando...">
+    </div>
 
     <script>
         const targetUrl = "https://ruhavik.gurtam.space";
 
+        // Função para verificar se o PWA está rodando como app instalado
         function isPwaInstalled() {
-            return window.matchMedia('(display-mode: standalone)').matches ||
+            return window.matchMedia('(display-mode: standalone)').matches || 
                    window.matchMedia('(display-mode: fullscreen)').matches ||
-                   window.matchMedia('(display-mode: minimal-ui)').matches;
+                   window.navigator.standalone === true; // Para iOS
         }
 
-        function loadPWA() {
+        function startProcess() {
             if (isPwaInstalled()) {
+                // REGRA: Se estiver instalado, redireciona AGORA
                 window.location.replace(targetUrl);
             } else {
+                // REGRA: Se for pelo navegador, mostra o GIF e espera 10s para permitir instalação
+                document.getElementById('loading-container').style.display = 'block';
                 setTimeout(() => {
                     window.location.replace(targetUrl);
-                }, 5000); // 5 segundos
+                }, 10000);
             }
         }
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/ruhavik/service-worker.js', { scope: '/ruhavik/' })
-                    .then(registration => {
-                        console.log('Service Worker registrado e pronto para instalação do PWA Ruhavik.');
-                        loadPWA();
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => {
+                        return navigator.serviceWorker.ready;
                     })
-                    .catch(error => {
-                        console.error('Falha no registro do Service Worker. PWA não instalável.', error);
-                        loadPWA();
+                    .then(() => {
+                        startProcess();
+                    })
+                    .catch(err => {
+                        console.error('Erro no SW:', err);
+                        startProcess();
                     });
             });
         } else {
-            console.warn('Navegador não suporta Service Worker. PWA não instalável.');
-            loadPWA();
+            startProcess();
         }
     </script>
 </body>
